@@ -9,13 +9,13 @@
 ```
 pip install mysql-connector-python openpyxl tqdm
 ```
-*mysql-connector-python
+* mysql-connector-python
     MySQL 데이터베이스에 접근할 수 있게 해주는 라이브러리입니다. 이 라이브러리를 사용하면, Python 코드에서 MySQL 데이터베이스와 상호작용하면서 데이터를 조회, 삽입, 수정, 삭제할 수 있습니다.
 
-*openpyxl
+* openpyxl
     Excel xlsx/xlsm/xltx/xltm 파일을 읽고 쓸 수 있게 해주는 라이브러리입니다. 이 라이브러리를 사용하면, Python 프로그램에서 Excel 파일을 생성하고, 기존 파일을 읽고, 데이터를 수정할 수 있습니다.
 
-*tqdm
+* tqdm
     빠르고 확장 가능한 진행률 바 라이브러리입니다. "taqaddum" (تقدّم)에서 이름이 유래되었으며, 이는 "진행"을 뜻하는 아랍어입니다. tqdm을 사용하면, for 루프나 다른 반복 작업의 진행 상황을 시각적으로 표시할 수 있습니다. 그래서 사용자는 작업이 얼마나 진행되었는지, 얼마나 남았는지, 예상 완료 시간은 언제인지를 쉽게 확인할 수 있습니다.
 
 ## 주요내용

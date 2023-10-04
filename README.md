@@ -79,7 +79,7 @@ cursor.execute(brand_query, brand_data)
 * 뒤에 있을 Food Table 외래키 설정을 위해 식품의 종류와 브랜드를 받아와 Category와 Brand Table에 삽입합니다.
 * cursor 객체를 통해 쿼리를 실행시켜줍니다.
 
-
+***
 
 ```python
  cursor.execute("SELECT id FROM Category WHERE name = %s", (row[food_idx[1]],))
@@ -90,14 +90,14 @@ cursor.execute(brand_query, brand_data)
 ```
 * 등록된 종류와 브랜드의 ID를 가져와 식품의 종류, 브랜드 칼럼에 입력해줍니다.
 
-
+***
 
 ```python
 div = float(row[food_idx[0]]) / 100
 ```
 * 1회 제공량이 식품마다 상이하므로 100g 제공량을 기준으로 합니다.
 
-
+***
 
 ```python
 for index, nut_idx in enumerate(food_idx[4:], start=3):
@@ -111,7 +111,7 @@ for index, nut_idx in enumerate(food_idx[4:], start=3):
 * enumerate를 통해 index를 함께 반환받으며, food_data list에 들어있는 변수에 영양성분 값을 넣어줍니다.
 * div값을 통해 100g 제공량일 때 영양성분 양으로 입렵합니다.
 
-
+***
 
 ```python
 food_query = """INSERT INTO Food (category_id, brand_id, name, energy, protein, fat, carbohydrate, sugar, sodium, 

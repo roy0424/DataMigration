@@ -1,7 +1,7 @@
 # DataMigration
 
 ## Excel Data to MySQL
-20만개의 식품안전나라에 등록된 식품영양성분 데이터와 그 외의 기업에서 제공하는 영양성분 데이터, 해외 식품영양성분 데이터를 MySQL 데이터베이스에 저장하기 위해 만든 프로그램입니다.
+식품안전나라에 등록된 식품영양성분 데이터를 MySQL 데이터베이스에 저장하기 위해 만든 프로그램입니다.
 
 데이터 파일 형식은 .xlsx이어야 합니다.
 
@@ -23,7 +23,7 @@ pip install mysql-connector-python openpyxl tqdm
 
 ## 주요내용
 ### 1. 코드
-```
+```python
 for row in tqdm(ws.iter_rows(min_row=2, values_only=True), total=ws.max_row - 1):
     category_query = "INSERT IGNORE INTO Category (name) VALUES (%s)"
     category_data = (row[food_idx[1]],)
@@ -66,3 +66,50 @@ cursor.close()
 conn.close()
 ```
 ### 2. 세부설명
+```python
+category_query = "INSERT IGNORE INTO Category (name) VALUES (%s)"
+category_data = (row[food_idx[1]],)
+
+brand_query = "INSERT IGNORE Brand (name) VALUES (%s)"
+brand_data = (row[food_idx[2]],)
+
+cursor.execute(category_query, category_data)
+cursor.execute(brand_query, brand_data)
+```
+* 뒤에 있을 Food Table 외래키 설정을 위해 식품의 종류와 브랜드를 받아와 Category와 Brand Table에 삽입합니다.
+* cursor 객체를 통해 쿼리를 실행시켜줍니다.
+
+```python
+ cursor.execute("SELECT id FROM Category WHERE name = %s", (row[food_idx[1]],))
+    food_data[0] = cursor.fetchone()[0]
+
+    cursor.execute("SELECT id FROM Brand WHERE name = %s", (row[food_idx[2]],))
+    food_data[1] = cursor.fetchone()[0]
+```
+* 등록된 종류와 브랜드의 ID를 가져와 식품의 종류, 브랜드 칼럼에 입력해줍니다.
+
+```python
+div = float(row[food_idx[0]]) / 100
+```
+* 1회 제공량이 식품마다 상이하므로 100g 제공량을 기준으로 합니다.
+
+```python
+for index, nut_idx in enumerate(food_idx[4:], start=3):
+        if nut_idx is not None:
+            food_data[index] = row[nut_idx]
+            if is_number(food_data[index]) == False:
+                food_data[index] = None
+            else:
+                food_data[index] = float(row[nut_idx]) / div
+```
+* enumerate를 통해 index를 함께 반환받으며, food_data list에 들어있는 변수에 영양성분 값을 넣어줍니다.
+* div값을 통해 100g 제공량일 때 영양성분 양으로 입렵합니다.
+
+```python
+food_query = """INSERT INTO Food (category_id, brand_id, name, energy, protein, fat, carbohydrate, sugar, sodium, 
+                cholesterol, saturate_fat, trans_fat)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"""
+
+cursor.execute(food_query, food_data)
+```
+* Food Table에 삽입할 쿼리입니다.
